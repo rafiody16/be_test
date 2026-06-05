@@ -9,9 +9,10 @@ use App\Http\Controllers\CutiController;
 Route::get('/auth/google', [GoogleAuthController::class, 'redirectToGoogle']);
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback']);
 Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     Route::middleware('role:employee')->group(function () {
         Route::post('/cuti/ajukan', [CutiController::class, 'ajukanCuti']);
