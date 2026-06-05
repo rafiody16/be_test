@@ -76,4 +76,20 @@ class AuthController extends Controller
             ],
         ], 200);
     }
+
+    public function logout() 
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthorized. Token tidak valid atau hilang.',
+            ], 401);
+        }
+
+        $user->tokens()->delete();
+        return response()->json([
+            'message' => 'Logout berhasil.',
+        ], 200);
+    }
 }
