@@ -6,7 +6,7 @@ Proyek dapat dijalankan menggunakan:
 
 - 🐳 Docker / Podman (Direkomendasikan)
 - 💻 Laragon / XAMPP (Tanpa Docker)
-
+https://rafiodypras16.postman.co/workspace/Team-Workspace~2eecc86b-fb7a-4b27-880a-608eb8d38dae/collection/55515111-808493f3-8eed-4a1a-a0ee-f10f1435859d?action=share&creator=55515111
 ---
 
 # 📋 Prasyarat
