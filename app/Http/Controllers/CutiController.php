@@ -92,19 +92,42 @@ class CutiController extends Controller
 
     public function getSisaKuota(int $id): int
     {
+        $currentYear = Carbon::now()->year;
+
+        $yearStart = Carbon::create($currentYear, 1, 1)->startOfDay();
+        $yearEnd = Carbon::create($currentYear, 12, 31)->endOfDay();
+    
         $approvedCuti = Cuti::query()
             ->where('user_id', $id)
             ->where('status', 'approved')
-            ->whereYear('start_date', Carbon::now()->year)
+            ->where(function ($query) use ($yearStart, $yearEnd) {
+                $query->whereBetween('start_date', [$yearStart, $yearEnd])
+                      ->orWhereBetween('end_date', [$yearStart, $yearEnd])
+                      ->orWhere(function ($q) use ($yearStart, $yearEnd) {
+                          $q->where('start_date', '<', $yearStart)
+                            ->where('end_date', '>', $yearEnd);
+                      });
+            })
             ->get();
-        
+    
         $totalHariCuti = 0;
 
         foreach ($approvedCuti as $cuti) {
-            $totalHariCuti += Carbon::parse($cuti->start_date)->diffInDays(Carbon::parse($cuti->end_date)) + 1;
+            $startDate = Carbon::parse($cuti->start_date);
+            $endDate = Carbon::parse($cuti->end_date);
+
+            if ($startDate->lt($yearStart)) {
+                $startDate = $yearStart->copy();
+            }
+
+            if ($endDate->gt($yearEnd)) {
+                $endDate = $yearEnd->copy();
+            }
+
+            $totalHariCuti += $startDate->diffInDays($endDate) + 1;
         }
 
-        return User::MAX_CUTI - $totalHariCuti;
+        return max(0, User::MAX_CUTI - $totalHariCuti);
     }
 
     public function cekKuotaCuti(int $reqHari, int $id):bool
