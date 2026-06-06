@@ -90,7 +90,7 @@ class CutiController extends Controller
         ], 200);
     }
 
-    public function cekKuotaCuti(int $reqHari, int $id):bool
+    public function getSisaKuota(int $id): int
     {
         $approvedCuti = Cuti::query()
             ->where('user_id', $id)
@@ -104,7 +104,12 @@ class CutiController extends Controller
             $totalHariCuti += Carbon::parse($cuti->start_date)->diffInDays(Carbon::parse($cuti->end_date)) + 1;
         }
 
-        return ($totalHariCuti + $reqHari) <= User::MAX_CUTI;
+        return User::MAX_CUTI - $totalHariCuti;
+    }
+
+    public function cekKuotaCuti(int $reqHari, int $id):bool
+    {
+        return $this->getSisaKuota($id) >= $reqHari;
     }
 
     public function ajukanCuti(Request $req)
@@ -156,6 +161,7 @@ class CutiController extends Controller
 
         return response()->json([
             'message' => 'Permintaan cuti berhasil diajukan.',
+            'sisa_kuota_cuti' => $this->getSisaKuota($user->id),
             'cuti' => $cuti,
         ], 201);
     }
@@ -173,6 +179,7 @@ class CutiController extends Controller
 
         return response()->json([
             'message' => 'Status cuti berhasil diambil.',
+            'sisa_kuota_cuti' => $this->getSisaKuota($user->id),
             'cuti' => $cuti,
         ], 200);
     }
@@ -205,6 +212,7 @@ class CutiController extends Controller
 
         return response()->json([
             'message' => 'Permintaan cuti berhasil dibatalkan.',
+            'sisa_kuota_cuti' => $this->getSisaKuota($user->id),
         ], 200);
     }
 
@@ -222,6 +230,7 @@ class CutiController extends Controller
 
         return response()->json([
             'message' => 'Riwayat cuti berhasil diambil.',
+            'sisa_kuota_cuti' => $this->getSisaKuota($user->id),
             'cuti' => $cuti,
         ], 200);
     }
