@@ -139,6 +139,7 @@ class CutiController extends Controller
         if (!$this->cekKuotaCuti($reqHari, $user->id)) {
             return response()->json([
                 'message' => 'Kuota cuti tahunan Anda tidak mencukupi untuk permintaan ini.',
+                'sisa_kuota_cuti' => $this->getSisaKuota($user->id),
             ], 400);
         }
 
