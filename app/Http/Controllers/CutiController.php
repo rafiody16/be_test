@@ -139,7 +139,11 @@ class CutiController extends Controller
 
         $attachmentPath = null;
         if ($req->hasFile('attachment')) {
-            $attachmentPath = $req->file('attachment')->store('attachments', 'public');
+            $file = $req->file('attachment');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(storage_path('app/public/attachments'), $filename);
+            $attachmentPath = 'attachments/' . $filename;
         }
 
         $cuti = Cuti::query()->create([
