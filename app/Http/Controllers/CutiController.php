@@ -161,7 +161,7 @@ class CutiController extends Controller
         $user = Auth::user();
         $cuti = Cuti::query()->where('user_id', $user->id)->latest()->first();
 
-        if ($cuti->isEmpty()) {
+        if (!$cuti) {
             return response()->json([
                 'message' => 'Anda belum memiliki permintaan cuti.',
             ], 404);
@@ -187,7 +187,7 @@ class CutiController extends Controller
                 ->latest()
                 ->first();
 
-        if ($cuti->isEmpty()) {
+        if (!$cuti) {
             return response()->json([
                 'message' => 'Tidak ada permintaan cuti yang sedang diproses untuk dibatalkan.',
             ], 400);
