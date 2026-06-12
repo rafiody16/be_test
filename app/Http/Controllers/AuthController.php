@@ -47,14 +47,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::query()->where('email', $validated['email'])->first();
-
-        if ($user && empty($user->password)) 
-        {
-            return response()->json([
-                'message' => 'Gunakan login google untuk akun ini.',
-            ], 403);
-        }
-
+        
         if (!Auth::attempt($validated)) 
         {
             return response()->json([

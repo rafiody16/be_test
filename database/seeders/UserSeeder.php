@@ -45,6 +45,14 @@ class UserSeeder extends Seeder
             'provider_id' => null,
         ]);
 
+        User::create([
+            'name' => 'Beni',
+            'email' => 'beni@poltek.com',
+            'password' => Hash::make('rahasia123'),
+            'role' => 'employee',
+            'provider_id' => null,
+        ]);
+
         // Untuk testing OAuth.
         User::create([
             'name' => 'Rafi Ody Prasetyo',

@@ -27,6 +27,19 @@ class CutiSeeder extends Seeder
                 ]);
                 continue; 
             }
+            
+            // Cuti lintas tahun
+            if ($employee->email === 'beni@poltek.com') {
+                Cuti::create([
+                    'user_id' => $employee->id,
+                    'start_date' => Carbon::create(2025, 12, 25)->format('Y-m-d'),
+                    'end_date' => Carbon::create(2026, 1, 5)->format('Y-m-d'),
+                    'reason' => 'Libur akhir tahun',
+                    'status' => 'approved',
+                    'attachment' => null,
+                ]);
+                continue;
+            }
 
             // Cuti Approve (3 hari)
             Cuti::create([
